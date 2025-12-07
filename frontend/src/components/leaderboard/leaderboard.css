@@ -1,0 +1,171 @@
+:root {
+  --panel: #ffffff;
+  --panel-border: #e7eaf0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-ghost: #eff4ff;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow-1: 0 6px 24px rgba(15, 23, 42, 0.06);
+  --shadow-2: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* === CARD === */
+.leaderboard-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* === HEADER === */
+.leaderboard-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.1rem;
+}
+
+.leaderboard-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.leaderboard-subtle {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* === LISTE === */
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.leaderboard-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  border: 1px dashed var(--panel-border);
+  border-radius: var(--radius-sm);
+  min-height: 180px;
+  background: rgba(15, 23, 42, 0.02);
+  font-size: 0.95rem;
+}
+
+/* === EINTRAG === */
+.leaderboard-entry {
+  background: #fff;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 0.95rem;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.leaderboard-entry:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+  border-color: #dde3ec;
+}
+
+/* === PLATZ 1–3 STREIFEN === */
+.leaderboard-entry:nth-child(1) {
+  box-shadow:
+    inset 3px 0 0 0 #fbbf24,
+    var(--shadow-1); /* Gold */
+}
+.leaderboard-entry:nth-child(2) {
+  box-shadow:
+    inset 3px 0 0 0 #cbd5e1,
+    var(--shadow-1); /* Silber */
+}
+.leaderboard-entry:nth-child(3) {
+  box-shadow:
+    inset 3px 0 0 0 #f59e0b,
+    var(--shadow-1); /* Bronze */
+}
+
+/* === BADGE === */
+.rank-badge {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  background: #f1f5f9;
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  user-select: none;
+}
+
+.rank-badge.medal {
+  background: var(--accent-ghost);
+  border-color: var(--accent);
+}
+
+/* === TEXT === */
+.leaderboard-name {
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.98rem;
+}
+
+.leaderboard-score {
+  font-weight: 800;
+  color: var(--accent);
+  text-align: right;
+  min-width: 3ch;
+  font-size: 1rem;
+}
+
+/* === PLATZHALTER === */
+.placeholder .leaderboard-name,
+.placeholder .leaderboard-score {
+  color: var(--muted);
+}
+
+/* === MOBILE === */
+@media (max-width: 520px) {
+  .leaderboard-entry {
+    grid-template-columns: 32px 1fr auto;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .rank-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
+  }
+
+  .leaderboard-name {
+    font-size: 0.9rem;
+  }
+
+  .leaderboard-score {
+    font-size: 0.92rem;
+  }
+}

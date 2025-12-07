@@ -1,0 +1,96 @@
+[
+  {
+    "game": 1234,
+    "start": {
+      "matchId": "1234",
+      "players": ["lorenz2@mail.com", "lorenz1@mail.com"],
+      "timestamp": "2025-10-16T11:19:51.063Z"
+    },
+    "moves": [
+      {
+        "matchId": "1234",
+        "player": "lorenz1@mail.com",
+        "flippedCard1": 1,
+        "flippedCard2": 3,
+        "match": true,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:20:07.296Z"
+      },
+      {
+        "matchId": "1234",
+        "player": "lorenz1@mail.com",
+        "flippedCard1": 4,
+        "flippedCard2": 5,
+        "match": false,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:21:15.430Z"
+      },
+      {
+        "matchId": "1234",
+        "player": "lorenz2@mail.com",
+        "flippedCard1": 8,
+        "flippedCard2": 5,
+        "match": false,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:21:41.380Z"
+      }
+    ],
+    "end": {
+      "matchId": "1234",
+      "winner": "lorenz1@mail.com",
+      "playerStats": [
+        { "email": "lorenz1@mail.com", "score": 8, "time": 133 },
+        { "email": "lorenz2@mail.com", "score": 0, "time": 26 }
+      ],
+      "duration": 159,
+      "timestamp": "2025-10-16T11:22:29.663Z"
+    }
+  },
+  {
+    "game": 5678,
+    "start": {
+      "matchId": "5678",
+      "players": ["lorenz2@mail.com", "lorenz1@mail.com"],
+      "timestamp": "2025-10-16T11:19:51.063Z"
+    },
+    "moves": [
+      {
+        "matchId": "5678",
+        "player": "lorenz1@mail.com",
+        "flippedCard1": 1,
+        "flippedCard2": 3,
+        "match": true,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:20:07.296Z"
+      },
+      {
+        "matchId": "5678",
+        "player": "lorenz1@mail.com",
+        "flippedCard1": 4,
+        "flippedCard2": 5,
+        "match": false,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:21:15.430Z"
+      },
+      {
+        "matchId": "5678",
+        "player": "lorenz2@mail.com",
+        "flippedCard1": 8,
+        "flippedCard2": 5,
+        "match": false,
+        "remainingPairs": 6,
+        "timestamp": "2025-10-16T11:21:41.380Z"
+      }
+    ],
+    "end": {
+      "matchId": "5678",
+      "winner": "lorenz1@mail.com",
+      "playerStats": [
+        { "email": "lorenz1@mail.com", "score": 8, "time": 133 },
+        { "email": "lorenz2@mail.com", "score": 0, "time": 26 }
+      ],
+      "duration": 159,
+      "timestamp": "2025-10-16T11:22:29.663Z"
+    }
+  }
+]

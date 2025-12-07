@@ -1,0 +1,89 @@
+.not-found-game-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem;
+  background: #f7f8fa;
+}
+
+.not-found-game-content {
+  text-align: center;
+  background: rgba(253, 254, 252, 1);
+  padding: 3rem;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+  max-width: 500px;
+  width: 100%;
+}
+
+.not-found-game-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.not-found-game-subtitle {
+  font-size: 2rem;
+  color: #0f172a;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+.not-found-game-message {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 1.5rem 0 2rem 0;
+  line-height: 1.6;
+}
+
+.not-found-game-home-link {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  padding: 0.8rem 2rem;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.not-found-game-home-link:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  text-decoration: none;
+  color: white;
+}
+
+.not-found-game-home-link:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .not-found-game-container {
+    padding: 1rem;
+  }
+
+  .not-found-game-content {
+    padding: 2rem;
+  }
+
+  .not-found-game-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .not-found-game-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .not-found-game-message {
+    font-size: 1rem;
+  }
+}

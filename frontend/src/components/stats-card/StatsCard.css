@@ -1,0 +1,172 @@
+:root {
+  --panel: #ffffff;
+  --panel-border: #e7eaf0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-ghost: #eff4ff;
+  --radius: 16px;
+}
+
+.stats-card.pane {
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.9rem; /* kompakter */
+  padding: 1.1rem; /* etwas weniger als vorher */
+  height: 100%; /* gleiche Höhe wie mittleres Panel */
+}
+
+/* Header */
+.stats-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.1rem;
+}
+.stats-username {
+  font-size: 0.9rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+.stats-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  border: 1px dashed var(--panel-border);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.02);
+}
+
+/* Feste Layout-Matrix (2 Spalten) */
+.stats-layout-fixed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "wins losses"
+    "winr winr"
+    "games games"
+    "time avg"
+    "high pairs";
+  gap: 0.75rem;
+  align-content: start;
+}
+
+/* Grid Areas Zuweisung */
+.area-wins {
+  grid-area: wins;
+}
+.area-losses {
+  grid-area: losses;
+}
+.area-winrate {
+  grid-area: winr;
+}
+.area-games {
+  grid-area: games;
+}
+.area-time {
+  grid-area: time;
+}
+.area-avg {
+  grid-area: avg;
+}
+.area-high {
+  grid-area: high;
+}
+.area-pairs {
+  grid-area: pairs;
+}
+
+/* Stat-Kachel (kompakter, damit nicht länger als Mitte) */
+.stat {
+  background: #fff;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 88px; /* kompakt, aber nicht zu klein */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border-color: #dde3ec;
+}
+
+/* Kopf der Kachel mit Icon */
+.stat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.stat-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--accent-ghost);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  flex: 0 0 auto;
+}
+
+/* Typografie */
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.stat-value {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+.stat-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Progressbar für Winrate */
+.progress {
+  height: 8px;
+  width: 100%;
+  border-radius: 999px;
+  background: #eef2f7;
+  border: 1px solid var(--panel-border);
+  overflow: hidden;
+  margin-top: 0.1rem;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  transition: width 260ms ease;
+}
+
+/* Mobile: 1 Spalte, natürliche Reihenfolge */
+@media (max-width: 560px) {
+  .stats-layout-fixed {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "wins"
+      "losses"
+      "winr"
+      "games"
+      "time"
+      "avg"
+      "high"
+      "pairs";
+  }
+}

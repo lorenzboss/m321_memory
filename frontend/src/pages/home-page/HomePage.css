@@ -1,0 +1,329 @@
+:root {
+  --bg: #f7f8fa;
+  --panel: #ffffff;
+  --panel-border: #e7eaf0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-ghost: #eff4ff;
+  --danger: #dc2626;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow-1: 0 6px 24px rgba(15, 23, 42, 0.06);
+  --shadow-2: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.home-container {
+  min-height: 50dvh;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.shell {
+  width: 100%;
+  max-width: 920px;
+}
+
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.glow {
+  isolation: isolate;
+}
+.welcome-section {
+  padding: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.headline {
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  margin: 0 0 0.5rem 0;
+}
+.gradient-text {
+  color: var(--accent);
+}
+.subtle {
+  color: var(--muted);
+}
+.user-info {
+  color: var(--muted);
+  font-size: 0.95rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.game-actions {
+  padding: 2rem;
+  margin-top: 1rem;
+}
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pane {
+  background: #fff;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+.pane:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+  border-color: #dde3ec;
+}
+.pane-title {
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+}
+
+.game-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  color: #0f172a;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.06s ease;
+  min-width: 160px;
+}
+.game-button:hover:not(:disabled) {
+  background: #eef2f7;
+  border-color: #e2e8f0;
+}
+.game-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.game-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+.btn-accent {
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-ghost);
+}
+.btn-muted {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+.btn-muted:hover:not(:disabled) {
+  background: #e9eef5;
+}
+
+.join-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.code-input-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.5rem; /* Abstand zwischen Dots und Button */
+}
+.game-code-input {
+  width: 90%;
+  text-align: center;
+  padding: 0.9rem 1rem;
+  font-size: 1.6rem;
+  letter-spacing: 0.35rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--text);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  outline: none;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.game-code-input::placeholder {
+  color: #c3c9d3;
+  letter-spacing: 0.35rem;
+}
+.game-code-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.code-dots {
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.code-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  transition:
+    background 0.12s ease,
+    transform 0.12s ease;
+}
+.code-dots span.filled {
+  background: var(--accent);
+  transform: scale(1.1);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+.divider {
+  height: 1px;
+  background: #eef1f5;
+  margin: 1.5rem 0;
+}
+
+.error-message {
+  margin: 1rem 0 1.25rem 0;
+  padding: 0.85rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 12px;
+  color: #9f1239;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 2rem 1rem;
+  }
+  .game-button {
+    width: 100%;
+  }
+  .game-code-input {
+    width: 100%;
+    letter-spacing: 0.3rem;
+  }
+}
+
+:root {
+  --action-width: 280px; /* gemeinsame Breite für beide Buttons (und das Input) */
+}
+
+/* Pane-Inhalt mittig, gleiche vertikale Struktur links/rechts */
+.pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.single-player-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.single-player-section .pane-title {
+  margin: 0;
+  text-align: center;
+}
+
+.single-player-section .game-button {
+  width: var(--action-width);
+}
+
+.cards-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+  justify-content: center;
+  align-items: stretch;
+}
+.stats-card-col {
+  width: 25%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.main-card-col {
+  width: 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.leaderboard-card-col {
+  width: 25%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 900px) {
+  .cards-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .stats-card-col,
+  .main-card-col,
+  .leaderboard-card-col {
+    width: 100%;
+  }
+}

@@ -1,0 +1,64 @@
+.navbar {
+  padding: 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+}
+
+.navbar-title-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.navbar-title-link:hover {
+  color: #2563eb;
+}
+
+.navbar-title-link h1 {
+  margin: 0;
+  cursor: pointer;
+}
+
+.navbar-button-container {
+  display: flex;
+  align-items: center;
+  height: 50%;
+  gap: 1rem;
+}
+
+.welcome-text {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0 1rem;
+}
+
+.navbar-button {
+  background-color: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  min-width: 140px;
+}
+
+.navbar-button:hover {
+  transform: translateY(-2px);
+  background-color: #f0f0f0;
+  border-color: #d0d0d0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

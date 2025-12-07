@@ -1,0 +1,146 @@
+/* Grundcontainer der Karte */
+.card {
+  width: 15vh;
+  height: 15vh;
+  perspective: 1000px;
+  transition: transform 0.2s ease;
+}
+
+/* Standard-Hover (nur für NICHT-gematchte Karten) */
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* Sobald Karte gematcht ist → kein Hover-Effekt */
+.card.matched:hover {
+  transform: none;
+}
+
+/* Nicht klickbare Karten (Multiplayer) */
+.card.not-clickable {
+  cursor: not-allowed;
+  filter: saturate(0.85);
+}
+.card.not-clickable:hover {
+  transform: none;
+}
+
+/* Enthält Vorder- und Rückseite */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+/* Flip-Zustand */
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Grundstil für Vorder- und Rückseite */
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    rgba(50, 50, 93, 0.1) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.1) 0 3px 7px -3px;
+  backface-visibility: hidden;
+}
+
+/* Animierter Rahmen-Effekt (nur, wenn nicht gematcht) */
+.card-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(135deg, #ff6ec4, #7873f5, #00ff2b);
+  background-size: 200% 200%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: borderShift 3s linear infinite;
+  -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  -webkit-mask-origin: content-box, border-box;
+  -webkit-mask-clip: content-box, border-box;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-origin: content-box, border-box;
+  mask-clip: content-box, border-box;
+  mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Hover aktiviert Verlauf nur bei NICHT-gematchten Karten */
+.card:hover .card-face::before {
+  opacity: 1;
+}
+
+/* Bei gematchten Karten kein Verlauf-Overlay */
+.card.matched .card-face::before {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* Vorderseite */
+.card-front {
+  transform: rotateY(0deg);
+}
+
+/* Rückseite */
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* Kartenbild */
+.card-face img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+  opacity: 0.92;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* ✅ Gefundene Karten: weißer Hintergrund mit schöner Border */
+.card-face.matched {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    rgba(50, 50, 93, 0.1) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.1) 0 3px 7px -3px;
+  transition: border 0.2s ease;
+}
+
+/* Eigene gematchte Karte – schönes Grün */
+.card-face.matched.matched-own {
+  border: 4px solid #16a34a;
+}
+
+/* Gegnerische gematchte Karte – dezentes Rot */
+.card-face.matched.matched-opponent {
+  border: 4px solid #dc2626;
+}
+
+/* Farbverlauf-Rahmen-Animation */
+@keyframes borderShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

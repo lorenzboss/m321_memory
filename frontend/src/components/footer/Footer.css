@@ -1,0 +1,130 @@
+:root {
+  --panel: #ffffff;
+  --panel-border: #e7eaf0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --bg-soft: #f7f8fa;
+  --radius: 16px;
+  --shadow: 0 -2px 12px rgba(15, 23, 42, 0.06);
+}
+
+.footer {
+  background: var(--panel);
+  border-top: 1px solid var(--panel-border);
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+
+.footer-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.credits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  font-size: 0.98rem;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 18px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  background: #fff;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.06s ease;
+}
+.person:hover {
+  background: var(--bg-soft);
+  border-color: #dce1ea;
+}
+.person:active {
+  transform: translateY(1px);
+}
+
+.person-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.person-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.person-role {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  background: #f8fafc;
+  color: var(--accent);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.06s ease;
+}
+.icon-btn:hover {
+  background: #eff4ff;
+  border-color: #dce6ff;
+}
+.icon-btn:active {
+  transform: translateY(1px);
+}
+.icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+@media (max-width: 600px) {
+  .footer-container {
+    padding: 14px 12px;
+  }
+  .credits {
+    gap: 14px;
+  }
+  .person {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .person-info {
+    align-items: center;
+  }
+}
