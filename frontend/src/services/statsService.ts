@@ -1,7 +1,7 @@
 import { LeaderboardEntry, UserStats } from "../types/stats";
 
 const BASE_URL = (
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:8000"
 ).replace(/\/+$/, "");
 
 type FetchOptions = Omit<RequestInit, "body"> & { signal?: AbortSignal };

@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"}/auth/me`,
+        `${import.meta.env.VITE_BACKEND_URL || "http://localhost:8000"}/auth/me`,
         {
           method: "GET",
           credentials: "include",

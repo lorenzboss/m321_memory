@@ -18,7 +18,7 @@ export const useSocket = (): Socket | null => {
     if (!globalSocket) {
       // WebSocket URL aus Umgebungsvariablen
       const socketUrl =
-        process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 
       console.log("Creating new WebSocket connection to:", socketUrl);
 
