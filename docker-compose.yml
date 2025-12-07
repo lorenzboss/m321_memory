@@ -1,5 +1,36 @@
 services:
-  # Frontend Webserver - runs on port 3000
+  # Backend Service (Game + Stats + Auth)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=http://localhost:${FRONTEND_PORT:-3000}
+    restart: unless-stopped
+    networks:
+      - memory-game-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8000/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Service (React + Nginx)
   frontend:
     build:
       context: ./frontend
@@ -7,194 +38,15 @@ services:
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     environment:
-      - REACT_APP_GAME_SERVICE_URL=http://${EXTERNAL_HOST:-localhost}:${GAME_SERVICE_PORT:-8001}
-      - REACT_APP_AUTH_SERVICE_URL=http://${EXTERNAL_HOST:-localhost}:${AUTH_SERVICE_PORT:-8002}
-      - REACT_APP_STATS_SERVICE_URL=http://${EXTERNAL_HOST:-localhost}:${STATS_SERVICE_PORT:-8003}
-      - REACT_APP_WEBSOCKET_URL=ws://${EXTERNAL_HOST:-localhost}:${GAME_SERVICE_PORT:-8001}
-      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING:-true}
-      - WATCHPACK_POLLING=${WATCHPACK_POLLING:-true}
-      - FAST_REFRESH=${FAST_REFRESH:-true}
-    volumes:
-      - ./frontend:/app # Mount local code
-      - /app/node_modules # Node modules inside container
+      - REACT_APP_BACKEND_URL=http://localhost:${BACKEND_PORT:-8000}
     depends_on:
-      - game-service
-      - auth-service
-      - stats-service
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # Game Service - runs on port 8001
-  game-service:
-    build:
-      context: ./backend/game-service
-      dockerfile: Dockerfile
-    ports:
-      - "${GAME_SERVICE_PORT:-8001}:${GAME_SERVICE_PORT:-8001}"
-    environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - DOCKER_ENV=true
-      - PORT=${GAME_SERVICE_PORT:-8001}
-      - MQTT_BROKER_URL=mqtt://${MQTT_HOST:-mqtt-broker}:${MQTT_PORT:-1883}
-      - AUTH_SERVICE_URL=http://${AUTH_SERVICE_HOST:-auth-service}:${AUTH_SERVICE_PORT:-8002}
-      - STATS_SERVICE_URL=http://${STATS_SERVICE_HOST:-stats-service}:${STATS_SERVICE_PORT:-8003}
-      - JWT_SECRET=${JWT_SECRET}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST:-postgres-db}
-      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
-    volumes:
-      - ./backend/game-service:/app # Mount source code for hot reloading
-      - /app/node_modules # Exclude node_modules from volume mount
-    depends_on:
-      mqtt-broker:
-        condition: service_started
-      auth-service:
-        condition: service_started
-      postgres-db:
+      backend:
         condition: service_healthy
+    restart: unless-stopped
     networks:
       - memory-game-network
-    restart: unless-stopped
-
-  # Authentication Service - runs on port 8002
-  auth-service:
-    image: zix99/simple-auth:latest
-    ports:
-      - "${AUTH_SERVICE_PORT:-8002}:80"
-    environment:
-      - SA_WEB_LOGIN_COOKIE_JWT_SIGNINGKEY=${JWT_SECRET}
-      - SA_DB_DRIVER=postgres
-      - SA_DB_URL=host=${POSTGRES_HOST:-postgres-db} user=${POSTGRES_USER} dbname=${POSTGRES_DB} password=${POSTGRES_PASSWORD} sslmode=disable
-      - CORS_ORIGINS=http://${EXTERNAL_HOST:-localhost}:${FRONTEND_PORT:-3000},http://${FRONTEND_HOST:-frontend}:3000
-      - SA_WEB_LOGIN_SETTINGS_ROUTEONLOGIN=http://${EXTERNAL_HOST:-localhost}:${FRONTEND_PORT:-3000}
-    depends_on:
-      postgres-db:
-        condition: service_healthy
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # PostgreSQL Database - runs on port 5432
-  postgres-db:
-    image: postgres:15-alpine
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_INITDB_ARGS=${POSTGRES_INITDB_ARGS:---auth-host=scram-sha-256}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # Adminer for Database Administration - runs on port 8080
-  adminer:
-    image: adminer:latest
-    ports:
-      - "${ADMINER_PORT:-8080}:8080"
-    environment:
-      - ADMINER_DEFAULT_SERVER=${POSTGRES_HOST:-postgres-db}
-      - ADMINER_DESIGN=${ADMINER_DESIGN:-pepa-linha}
-      - ADMINER_PLUGINS=${ADMINER_PLUGINS:-tables-filter tinymce}
-    depends_on:
-      - postgres-db
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # Stats Service - runs on port 8003
-  stats-service:
-    build:
-      context: ./backend/stats-service
-      dockerfile: Dockerfile
-    ports:
-      - "${STATS_SERVICE_PORT:-8003}:${STATS_SERVICE_PORT:-8003}"
-    environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - DOCKER_ENV=true
-      - PORT=${STATS_SERVICE_PORT:-8003}
-      - MQTT_BROKER_URL=mqtt://${MQTT_HOST:-mqtt-broker}:${MQTT_PORT:-1883}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST:-postgres-db}
-      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
-      - ALLOWED_ORIGINS=http://${EXTERNAL_HOST:-localhost}:${GAME_SERVICE_PORT:-8001},http://${GAME_SERVICE_HOST:-game-service}:${GAME_SERVICE_PORT:-8001}
-    depends_on:
-      mqtt-broker:
-        condition: service_started
-      postgres-db:
-        condition: service_healthy
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # Log Service - MQTT-to-JSON Logger (kein HTTP-Server)
-  log-service:
-    build:
-      context: ./backend/log-service
-      dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - DOCKER_ENV=true
-      - MQTT_BROKER_URL=mqtt://${MQTT_HOST:-mqtt-broker}:${MQTT_PORT:-1883}
-      - LOG_DIRECTORY=${LOG_DIRECTORY:-/app/logs}
-    volumes:
-      - ./backend/log-service:/app # Mount source code for hot reloading
-      - /app/node_modules # Exclude node_modules from volume mount
-      - ./backend/log-service/logs:/app/logs # Mount log directory to persist logs
-    depends_on:
-      - mqtt-broker
-    networks:
-      - memory-game-network
-    restart: unless-stopped
-
-  # MQTT Broker - runs on port 1883 (MQTT) and 9001 (WebSocket)
-  mqtt-broker:
-    image: eclipse-mosquitto:2.0-openssl
-    ports:
-      - "${MQTT_PORT:-1883}:1883" # MQTT Port
-      - "${MQTT_WEBSOCKET_PORT:-9001}:9001" # WebSocket Port
-    volumes:
-      - ./mqtt-config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - mqtt_data:/mosquitto/data
-      - mqtt_logs:/mosquitto/log
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "mosquitto_sub -h localhost -p 1883 -t '$$SYS/broker/uptime' -C 1 -W 5 || exit 1",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    networks:
-      - memory-game-network
-    restart: unless-stopped
 
 networks:
   memory-game-network:
     driver: bridge
     name: memory-game-network
-
-volumes:
-  postgres_data:
-    name: memory_game_postgres_data
-  mqtt_data:
-    name: memory_game_mqtt_data
-  mqtt_logs:
-    name: memory_game_mqtt_logs
