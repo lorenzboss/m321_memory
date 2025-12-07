@@ -35,6 +35,13 @@
   gap: 1rem;
 }
 
+.navbar-user {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0 1rem;
+}
+
 .welcome-text {
   color: #333;
   font-size: 16px;

@@ -43,7 +43,7 @@ export default function HomePage() {
       setStatsError(null);
 
       try {
-        const payload = await fetchUserStats(user.name, {
+        const payload = await fetchUserStats(user.username, {
           signal: statsController.signal,
         });
 
@@ -157,7 +157,7 @@ export default function HomePage() {
           setError(data.error || "Authentication failed");
           setIsCreatingGame(false);
         }
-      },
+      }
     );
 
     socket.once("game-created", (gameId: string) => {
@@ -171,9 +171,8 @@ export default function HomePage() {
     });
 
     socket.emit("authenticate", {
-      uuid: user.uuid,
-      name: user.name,
-      email: user.email,
+      uuid: user.id.toString(),
+      name: user.username,
     });
   };
 
@@ -201,6 +200,48 @@ export default function HomePage() {
     }
   };
 
+  // Show login prompt for unauthenticated users
+  if (!isAuthenticated) {
+    return (
+      <div className="home-container">
+        <div className="ambient" />
+        <div className="cards-row">
+          <div
+            className="main-card-col"
+            style={{ maxWidth: "600px", margin: "0 auto" }}
+          >
+            <div
+              className="welcome-section glass glow"
+              style={{ textAlign: "center", padding: "3rem" }}
+            >
+              <h2 className="headline">Welcome to Memoriq!</h2>
+              <p
+                style={{
+                  fontSize: "1.1rem",
+                  margin: "1.5rem 0",
+                  color: "#666",
+                }}
+              >
+                Please sign in or create an account to start playing
+              </p>
+              <button
+                className="game-button btn-primary"
+                onClick={() => navigate("/auth")}
+                style={{
+                  fontSize: "1.2rem",
+                  padding: "1rem 2rem",
+                  marginTop: "1rem",
+                }}
+              >
+                Sign In / Register
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="home-container">
       <div className="ambient" />
@@ -217,12 +258,9 @@ export default function HomePage() {
           {/* The middle section remains exactly as before! */}
           <div className="welcome-section glass glow">
             <h2 className="headline">
-              Welcome back, <span className="gradient-text">{user?.name}</span>!
+              Welcome back,{" "}
+              <span className="gradient-text">{user?.username}</span>!
             </h2>
-            <div className="user-info">
-              <div>Username: {user?.name}</div>
-              <div>Email Address: {user?.email}</div>
-            </div>
           </div>
           {error && (
             <div className="error-message glow error-glow">{error}</div>

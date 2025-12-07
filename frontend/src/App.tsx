@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import { AuthProvider } from "./contexts/AuthContext";
+import AuthPage from "./pages/auth-page/AuthPage";
 import HomePage from "./pages/home-page/HomePage";
 import MultiplayerGamePage from "./pages/multiplayer-game-page/MultiplayerGamePage";
 import NotFoundGamePage from "./pages/not-found-game-page/NotFoundGamePage";
@@ -17,6 +18,7 @@ export default function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/practice" element={<PracticePage />} />
             <Route
               path="/multiplayer/:gameId"

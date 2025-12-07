@@ -1,5 +1,5 @@
-import "./StatsCard.css";
 import { UserStats } from "../../types/stats";
+import "./StatsCard.css";
 
 function formatDuration(totalSeconds: number) {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -148,21 +148,6 @@ export default function StatsCard({
     );
   }
 
-  const total = stats.totalGamesPlayed || stats.wins + stats.losses;
-  const winRate =
-    typeof stats.winRate === "number"
-      ? stats.winRate
-      : total
-        ? (stats.wins / total) * 100
-        : 0;
-
-  const avg =
-    typeof stats.averageGameDuration === "number"
-      ? stats.averageGameDuration
-      : total
-        ? stats.totalTimePlayed / total
-        : 0;
-
   return (
     <section className="pane stats-card">
       <header className="stats-header">
@@ -185,22 +170,22 @@ export default function StatsCard({
           icon={<Cross />}
         />
 
-        {/* Zeile 2 (volle Breite) */}
-        <Stat
-          className="area-winrate"
-          label="Win rate"
-          value={`${winRate.toFixed(0)}%`}
-          hint={`${stats.wins}/${total} games`}
-          icon={<Target />}
-          progress={winRate}
-        />
-
         {/* Zeile 3 (volle Breite) */}
         <Stat
           className="area-games"
           label="Games"
-          value={String(total)}
+          value={String(stats.totalGamesPlayed ?? 0)}
           icon={<Puzzle />}
+        />
+
+        {/* Zeile 2 (volle Breite) */}
+        <Stat
+          className="area-winrate"
+          label="Win rate"
+          value={`${((stats.winRate ?? 0) * 100).toFixed(0)}%`}
+          hint={`${stats.wins}/${stats.totalGamesPlayed ?? 0} games`}
+          icon={<Target />}
+          progress={(stats.winRate ?? 0) * 100}
         />
 
         {/* Zeile 4 */}
@@ -213,7 +198,7 @@ export default function StatsCard({
         <Stat
           className="area-avg"
           label="Avg. duration"
-          value={formatDuration(avg)}
+          value={formatDuration(stats.averageGameDuration ?? 0)}
           icon={<Clock />}
         />
 

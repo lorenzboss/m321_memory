@@ -1,7 +1,7 @@
 import { LeaderboardEntry, UserStats } from "../types/stats";
 
 const BASE_URL = (
-  process.env.REACT_APP_GAME_SERVICE_URL || "http://localhost:8001"
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"
 ).replace(/\/+$/, "");
 
 type FetchOptions = Omit<RequestInit, "body"> & { signal?: AbortSignal };
@@ -24,11 +24,11 @@ function buildOptions(init?: FetchOptions): RequestInit {
 
 export async function fetchUserStats(
   username: string,
-  options?: FetchOptions,
+  options?: FetchOptions
 ): Promise<UserStats | null> {
   const response = await fetch(
-    `${BASE_URL}/stats/users/${encodeURIComponent(username)}`,
-    buildOptions(options),
+    `${BASE_URL}/stats/${encodeURIComponent(username)}`,
+    buildOptions(options)
   );
 
   if (response.status === 404) {
@@ -43,11 +43,11 @@ export async function fetchUserStats(
 }
 
 export async function fetchLeaderboard(
-  options?: FetchOptions,
+  options?: FetchOptions
 ): Promise<LeaderboardEntry[]> {
   const response = await fetch(
-    `${BASE_URL}/stats/leaderboard`,
-    buildOptions(options),
+    `${BASE_URL}/leaderboard`,
+    buildOptions(options)
   );
 
   if (!response.ok) {

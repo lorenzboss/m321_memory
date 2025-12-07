@@ -7,9 +7,8 @@ import React, {
 } from "react";
 
 interface User {
-  uuid: string;
-  name: string;
-  email: string;
+  id: number;
+  username: string;
 }
 
 interface AuthContextType {
@@ -42,25 +41,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${process.env.REACT_APP_GAME_SERVICE_URL || "http://localhost:8001"}/auth`,
+        `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"}/auth/me`,
         {
           method: "GET",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
         const data = await response.json();
         console.log("Auth check success:", data);
 
-        if (data.user) {
+        if (data.id) {
           setUser({
-            uuid: data.user.uuid,
-            name: data.user.name,
-            email: data.user.email,
+            id: data.id,
+            username: data.username,
           });
           setIsAuthenticated(true);
           return true;

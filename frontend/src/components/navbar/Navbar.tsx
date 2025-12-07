@@ -1,9 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./Navbar.css";
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+
 export default function Navbar() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await fetch(`${BACKEND_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      window.location.href = "/";
+    }
+  };
 
   if (isLoading) {
     return (
@@ -32,25 +49,14 @@ export default function Navbar() {
         </div>
         <div className="navbar-button-container">
           {!isAuthenticated ? (
-            <button
-              className="navbar-button"
-              onClick={() =>
-                (window.location.href =
-                  process.env.REACT_APP_AUTH_SERVICE_URL ||
-                  "http://localhost:8002")
-              }
-            >
+            <button className="navbar-button" onClick={() => navigate("/auth")}>
               Sign In
             </button>
           ) : (
             <>
-              <button
-                className="navbar-button"
-                onClick={() =>
-                  (window.location.href = `${process.env.REACT_APP_AUTH_SERVICE_URL || "http://localhost:8002"}/#/manage`)
-                }
-              >
-                Manage Account
+              <span className="navbar-user">Hello, {user?.username}!</span>
+              <button className="navbar-button" onClick={handleLogout}>
+                Logout
               </button>
             </>
           )}
