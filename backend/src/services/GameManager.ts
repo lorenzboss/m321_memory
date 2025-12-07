@@ -269,8 +269,8 @@ export class GameManager {
         cards: game.cards.map((card) => ({
           id: card.id,
           pokemonId: card.pokemonId,
-          pokemonName: pokemons[card.pokemonId - 1]?.name || "Unknown",
-          pokemonImg: pokemons[card.pokemonId - 1]?.img || "",
+          pokemonName: pokemons[card.pokemonId]?.name || "Unknown",
+          pokemonImg: pokemons[card.pokemonId]?.img || "",
           isFlipped: card.isFlipped,
           isMatched: card.isMatched,
           matchedBy: card.matchedBy,
@@ -313,15 +313,18 @@ export class GameManager {
 
     const cards: Card[] = [];
     selectedPokemons.forEach((pokemon, index) => {
+      // Find the actual index of this pokemon in the pokemons array
+      const pokemonId = pokemons.findIndex((p) => p.name === pokemon.name);
+
       cards.push({
         id: `${index}-1`,
-        pokemonId: index,
+        pokemonId: pokemonId,
         isFlipped: false,
         isMatched: false,
       });
       cards.push({
         id: `${index}-2`,
-        pokemonId: index,
+        pokemonId: pokemonId,
         isFlipped: false,
         isMatched: false,
       });
