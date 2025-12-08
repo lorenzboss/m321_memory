@@ -1,5 +1,4 @@
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { createServer } from "http";
@@ -28,16 +27,11 @@ const io = new Server(server, {
 });
 
 // Middlewares
-// Manual CORS handling for preflight requests
+// Permissive CORS - allow all origins with credentials
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    "https://memory.lorenzboss.com",
-    "http://localhost:3000"
-  ].filter(Boolean);
   
-  if (origin && allowedOrigins.includes(origin)) {
+  if (origin) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
@@ -45,12 +39,12 @@ app.use((req, res, next) => {
     res.header("Access-Control-Expose-Headers", "Set-Cookie");
     res.header("Access-Control-Max-Age", "86400");
   }
-  
+
   // Handle preflight
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
-  
+
   next();
 });
 
