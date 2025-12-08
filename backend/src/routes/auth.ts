@@ -3,8 +3,12 @@ import jwt from "jsonwebtoken";
 import { authService } from "../services/AuthService";
 
 const router = Router();
-const JWT_SECRET =
-  process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_SECRET = process.env.JWT_SECRET || "";
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
+
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 router.post("/auth/register", async (req: Request, res: Response) => {
@@ -100,7 +104,7 @@ router.get("/auth/me", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as {
+    const decoded = jwt.verify(token, JWT_SECRET) as unknown as {
       userId: number;
       username: string;
     };

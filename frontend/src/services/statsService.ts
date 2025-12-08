@@ -1,8 +1,6 @@
 import { LeaderboardEntry, UserStats } from "../types/stats";
 
-const BASE_URL = (
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:8000"
-).replace(/\/+$/, "");
+const BASE_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, "");
 
 type FetchOptions = Omit<RequestInit, "body"> & { signal?: AbortSignal };
 
