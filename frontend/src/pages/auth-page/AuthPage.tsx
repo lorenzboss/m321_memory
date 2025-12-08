@@ -8,6 +8,7 @@ export const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ export const AuthPage: React.FC = () => {
       setError("Username can only contain letters, numbers, and underscores");
       return false;
     }
-    if (value.length < 3 || value.length > 50) {
-      setError("Username must be between 3 and 50 characters");
+    if (value.length < 3 || value.length > 10) {
+      setError("Username must be between 3 and 10 characters");
       return false;
     }
     return true;
@@ -31,6 +32,13 @@ export const AuthPage: React.FC = () => {
 
     // Validate username format
     if (!isLogin && !validateUsername(username)) {
+      setLoading(false);
+      return;
+    }
+
+    // Validate password confirmation for registration
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -85,7 +93,7 @@ export const AuthPage: React.FC = () => {
                 pattern="[a-zA-Z0-9_]+"
                 title="Username can only contain letters, numbers, and underscores"
                 minLength={3}
-                maxLength={50}
+                maxLength={10}
               />
             </div>
 
@@ -102,7 +110,22 @@ export const AuthPage: React.FC = () => {
               />
             </div>
 
-            {error && <div className="error-message">{error}</div>}
+            {!isLogin && (
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  placeholder="Confirm your password"
+                />
+              </div>
+            )}
+
+            {error && <div className="error">{error}</div>}
 
             <button type="submit" className="auth-button" disabled={loading}>
               {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
@@ -116,6 +139,7 @@ export const AuthPage: React.FC = () => {
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError("");
+                setConfirmPassword("");
               }}
               className="toggle-button"
             >
