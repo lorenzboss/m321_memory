@@ -31,16 +31,6 @@ services:
         type: SECRET
       - key: FRONTEND_URL
         value: "https://memory.lorenzboss.com"
-    cors:
-      allow_origins:
-        - prefix: https://memory.lorenzboss.com
-      allow_methods:
-        - GET
-        - POST
-        - PUT
-        - DELETE
-        - OPTIONS
-      allow_credentials: true
     health_check:
       http_path: /health
       initial_delay_seconds: 60
