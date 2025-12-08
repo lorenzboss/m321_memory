@@ -1,14 +1,17 @@
-name: memory-game
+name: memory-game-backend
 region: fra
+domains:
+  - domain: memory-api.lorenzboss.com
+    type: PRIMARY
 
 services:
-  # Backend Service
+  # Backend Service only (Frontend on Vercel)
   - name: backend
     github:
       repo: lorenzboss/m321_memory
       branch: main
       deploy_on_push: true
-    source_dir: /backend
+    source_dir: backend
     dockerfile_path: backend/Dockerfile
     http_port: 8000
     instance_count: 1
@@ -27,25 +30,17 @@ services:
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: FRONTEND_URL
-        value: "${APP_URL}"
+        value: "https://memory.lorenzboss.com"
+    cors:
+      allow_origins:
+        - prefix: https://memory.lorenzboss.com
+      allow_methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allow_credentials: true
     health_check:
       http_path: /health
       initial_delay_seconds: 60
-
-  # Frontend Service
-  - name: frontend
-    github:
-      repo: lorenzboss/m321_memory
-      branch: main
-      deploy_on_push: true
-    source_dir: /frontend
-    dockerfile_path: frontend/Dockerfile
-    http_port: 3000
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    routes:
-      - path: /
-    envs:
-      - key: REACT_APP_BACKEND_URL
-        value: "${backend.PUBLIC_URL}"
-    build_command: npm run build
