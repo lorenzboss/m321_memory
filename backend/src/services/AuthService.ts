@@ -13,8 +13,8 @@ export class AuthService {
       );
     }
 
-    if (username.length < 3 || username.length > 50) {
-      throw new Error("Username must be between 3 and 50 characters");
+    if (username.length < 3 || username.length > 10) {
+      throw new Error("Username must be between 3 and 10 characters");
     }
 
     // Check if user exists
