@@ -28,18 +28,32 @@ const io = new Server(server, {
 });
 
 // Middlewares
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "https://memory.lorenzboss.com",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With", "Accept"],
-    exposedHeaders: ["Set-Cookie"],
-    maxAge: 86400, // 24 hours
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  })
-);
+// Manual CORS handling for preflight requests
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "https://memory.lorenzboss.com",
+    "http://localhost:3000"
+  ].filter(Boolean);
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Authorization,Cookie,X-Requested-With,Accept");
+    res.header("Access-Control-Expose-Headers", "Set-Cookie");
+    res.header("Access-Control-Max-Age", "86400");
+  }
+  
+  // Handle preflight
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+  
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
