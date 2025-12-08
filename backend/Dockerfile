@@ -1,38 +1,37 @@
-# Production-optimized multi-stage build for Backend
+# Ultra-lightweight production build for Backend
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy dependencies
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production && \
-    npm install -D typescript @types/node
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
-# Copy source code
+# Copy source and build
 COPY src ./src
-
-# Build TypeScript
 RUN npm run build
 
-# Production stage
+# Production stage - minimal image
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files and install only production dependencies
+# Install only production dependencies
 COPY package*.json ./
 RUN npm ci --only=production && \
-    npm cache clean --force
+    npm cache clean --force && \
+    rm -rf /tmp/*
 
-# Copy built files from builder
+# Copy compiled code
 COPY --from=builder /app/dist ./dist
 
-# Create non-root user
+# Security: non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+    adduser -S nodejs -u 1001 && \
+    chown -R nodejs:nodejs /app
 
 USER nodejs
 
